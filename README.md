@@ -12,7 +12,9 @@ npm i @jdev/http-client
 
 ## 🚀Get Started
 
-Despues de la instalacion de la dependencia a tu proyecto, tienes que importar el HttpProvider en el `main.jsx`.
+## Provider
+
+importar el provider de la libreria, este provider necesita algunas configuraciones.
 
 ```jsx
 import ReactDOM from 'react-dom/client'
@@ -29,135 +31,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
 ## Config
 
-HttpProvider necesita tener algunas configuraciones por defecto, las configuraciones son para poder detectar a que direcion de la `API` o que tipo de peticiones quieres hacer
+Puedes crear un archivo especifico para el tema de las configuraciones o lo puedes tener en el mismo **main.js**, las configuraciones debe incluir.
 
-para definir las configuraciones sigue los siguientes pasos
+- **listURL**: aqui puedes definir todas tus rutas
+- **baseURL**: la URL base de tu API
 
-- **Definir la baseUrl**: La `baseUrl` es la que usa el http-client para saber el origen de la **API** para definir la `baseUrl` puedes usar el siguiente codigo
-
-  `base-url.js`
-
-  ```js
-  export const BASE_URL = 'http://127.0.0.1/api' // -> toda la url base
-  ```
-
-  **Tienes que remplazar la `BASE_URL`** a la direcion de tu `API-REST`
-
-- **Definir las Querys**: las Querys son aquellas consultas que solo suelen devolver datos son como las peticiones `GET`, para poder pasarselas por parametros al `HttpProvider` tienes que definirlas.
-
-  `querys-routes.js`
-
-  ```js
-  export const QUERYS = [
-    {
-      name: 'getUsers', // -> Nombre de la query, esto lo usaras para refenirte a este Query a la hora de hacer consultas
-      url: '/getUsers', // -> esto es la url de la query que a unirla con la BASE_URL tienes la URL absoluta
-    },
-  ]
-  ```
-
-  puedes defenir todas la querys o peticiones `GET` que tenga tu `API-REST`
-
-- **Definir las Mutations**: las Mutations son aquellas consultas que puede modificar datos son aparecidas a las peticiones `POST,PUT,DELETE`, para poder pasarselas por parametros al `HttpProvider` tienes que definirlas.
-
-  `mutations-routes.js`
-
-  ```js
-  export const MUTATIONS = [
-    {
-      name: 'createUsers', // -> Nombre de la query, esto lo usaras para refenirte a este Query a la hora de hacer consultas
-      url: '/createUser', // -> esto es la url de la query que a unirla con la BASE_URL tienes la URL absoluta
-      method: 'POST', // -> esto sera el metodo de modificacion de la consulta.
-    },
-    {
-      name: 'updateUser',
-      url: '/updateUser',
-      method: 'PUT', // -> metodo de modificacion
-    },
-    {
-      name: 'deleteUser',
-      url: '/deleteUser',
-      method: 'DELETE', // -> metodo de eliminacion
-    },
-  ]
-  ```
-
-  puedes defenir todas la mutations o peticiones `POST,PUT,DELETE` que tenga tu `API-REST`
-
-- **Definir el headers**: el header de http-client tiene alguna propiedades ya definidas, pero tambien te da la capacidad de que tu puedas añadir mas cabeceras. la puedes añadir de la siguiente forma.
-  `headers.js`
-
-  ```js
-  export const HEADERS = {
-    'Content-Type': 'application/json', // -> esta cabecera ya esta definida en el http-client
-    // Puedes definir todas la headers que quieras que tenga tu http-client
-    accept: '*',
-    'user-agent': 'http-client',
-    origin: 'http-client',
-  }
-  ```
-
-- **Orden de la configuraciones**: Para ordenar las configuraciones puedes usar dos formas:
-
-  - Definir un solo archivo todas las configuraciones establecidas en los pasos anteriores, el archivo quedaria de la siguiete forma.
-
-    `config.js`
-
-    ```js
-    export const BASE_URL = 'http://127.0.0.1/api' // -> toda la url base
-
-    // Querys
-    export const QUERYS = [
-      {
-        name: 'getUsers', // -> Nombre de la query, esto lo usaras para refenirte a este Query a la hora de hacer consultas
-        url: '/getUsers', // -> esto es la url de la query que a unirla con la BASE_URL tienes la URL absoluta
-      },
-    ]
-
-    // Mutations
-    export const MUTATIONS = [
-      {
-        name: 'createUsers', // -> Nombre de la query, esto lo usaras para refenirte a este Query a la hora de hacer consultas
-        url: '/createUser', // -> esto es la url de la query que a unirla con la BASE_URL tienes la URL absoluta
-        method: 'POST', // -> esto sera el metodo de modificacion de la consulta.
-      },
-      {
-        name: 'updateUser',
-        url: '/updateUser',
-        method: 'PUT', // -> metodo de modificacion
-      },
-      {
-        name: 'deleteUser',
-        url: '/deleteUser',
-        method: 'DELETE', // -> metodo de eliminacion
-      },
-    ]
-
-    //Headers
-    export const HEADERS = {
-      'Content-Type': 'application/json', // -> esta cabecera ya esta definida en el http-client
-      // Puedes definir todas la headers que quieras que tenga tu http-client
-      accept: '*',
-      'user-agent': 'http-client',
-      origin: 'http-client',
-    }
-    ```
-
-  - Otra forma y la mas recomenda es crear archivos y guardalos en una carpeta con el siguiente nombre `config-http-client` la estructura es la siguientes.
-
-    ```text
-    ├── src/
-    │   ├── config-http-client/
-    │   │   └── querys-routes.js
-    │   │   └── mutations-routes.js
-    │   │   └── headers.js
-    │   │   └── base-url.js
-    └──
-    ```
-
-    de esta forma tenemos mas control de modificaciones de nuestra configuracion.
-
-Ya que tenemos definidas todas la configuraciones podemos pasarselas al `HttpProvider`.
+y esta configuracion se la pasas al provider por la prop: **config**
 
 `main.jsx`
 
@@ -166,41 +45,51 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 
 import { HttpProvider } from '@jdev/http-client'
-import { QUERYS } from './config-http-client/querys-routes.js'
-import { MUTATIONS } from './config-http-client/mutations-routes.js'
-import { HEADERS } from './config-http-client/headers.js'
-import { BASE_URL } from './config-http-client/base-url.js'
+
+const CONFIG = {
+  baseURL: 'https://localhost:3000/',
+  listURL: [
+    {
+      nameRequest: 'getUsers',
+      method: 'GET',
+      url: 'api/getUsers',
+    },
+    {
+      nameRequest: 'createUser',
+      method: 'POST',
+      ulr: 'api/createUser',
+    },
+  ],
+}
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <HttpProvider
-    querys={QUERYS}
-    mutations={MUTATIONS}
-    headers={HEADERS}
-    baseUrl={BASE_URL}
-  >
+  <HttpProvider config={CONFIG}>
     <App />
   </HttpProvider>
 )
 ```
 
-Con esto ya tenemos configurado nuestro http-client.
-
 # Hooks
 
-## useQuery:
+## useRequest:
 
-el hook useQuery sirve para poder dar uso las peticiones de tipo query que definimos en las configuraciones.
+hook para preparar y enviar la peticion HTTP a tu servidor de una manera segura y rapida.
 
 `params`:
 
 - `nameRequest <String>` : nombre de la mutations,definidos en las configuraciones , ejemplo: `getUsers`
-- `params?  <Array[string]>` : parametros que le vas a pasar a la peticion
+- `body?  <Object>` : datos para enviar al servidor
+- `timeAbort? <Number>` : tiempo para abordar la peticion si no recibe una respuesta
 
 ```jsx
-import { useQuery } from '@jdev/http-client'
+import { useRequest } from '@jdev/http-client'
 
 function ListUser(){
-  const { data, isLoading, error} = useQuery('getUsers') //
+  const { data, isLoading,sendRequest, error} = useRequest('getUsers',null,2000) //
+
+  useEffect(() => {
+    sendRequest()
+  },[])
 
   return (
     <div>
@@ -212,94 +101,216 @@ function ListUser(){
 }
 ```
 
-el hook useQuery devuelve los siguentes valores.
+el hook useSend devuelve los siguentes valores.
 
 - **data**: aqui devolvera los resultados de la peticion
 - **isLoading**: si la peticion aun se esta cargado
 - **isError**: si hay un error
 - **error**: el error de la peticion
-- **status**: el codigo de status de la peticion
-- **statusText**: el codigo de status en texto
-- **isOk**: si la peticion fue todo un exito
+- **sendRequest**: guncion para enviar la petcion, recibe por parametros, las query para tu peticion
 - **abortRequest**: para abordar la peticion
 
-## useMutation:
+## useSendRequest:
 
-el hook useMutation sirve para poder dar uso las peticiones de tipo mutation que definimos en las configuraciones.
+hook para enviar petiones este hooks, se usa junto el hook **useRequest**
 
 `params`:
 
-- `nameRequest <String>` : nombre de la mutations,definidos en las configuraciones , ejemplo: `createUsers`
-- `body? <Object>` : los datos que le quieres enviar a la peticion
-- `params? <Array[string]>` : parametros que le vas a pasar a la peticion
+- `functionRequest <Function>` : request para enviar
+- `params? <String>` : query para enviar junto a la request
+- `timeUpdate? <Array[string]>` : tiempo para volver a ejecutar la request
 
 ```jsx
-import { useMutation } from '@jdev/http-client'
+import { useSendRequest,useRequest } from '@jdev/http-client'
 
-function createUsers() {
-  const { data, isLoading, mutation, error } = useMutation('createUser', {
-    input: { username: 'ejemplo123', email: 'ejemplo@ejemplo.com' },
-  }) //
+function ListUser(){
+  const { data, isLoading,sendRequest, error} = useRequest('getUsers',null,2000) //
+  const isSend = useSendRequest(sendRequest,null,4000)
 
   return (
     <div>
-      {error && <p>{error}</p>}
-      <button onClick={mutation}>Create User</button>
       {isLoading && <p>Loading</p>}
+      {data && <CardUser data={data?.getUsers.data}>}
+      {error && <p>{error}</p> }
+      {isSend && <p>Respuesta enviada</p>}
     </div>
   )
 }
 ```
 
-el hook useQuery devuelve los siguentes valores.
+el hook useSendRequest devuelve los siguentes valores.
 
-- **data**: aqui devolvera los resultados de la peticion
-- **isLoading**: si la peticion aun se esta cargado
-- **mutation**: para enviar la peticion al servidor
-- **isError**: si hay un error
-- **error**: el error de la peticion
-- **status**: el codigo de status de la peticion
-- **statusText**: el codigo de status en texto
-- **isOk**: si la peticion fue todo un exito
-- **abortRequest**: para abordar la peticion
+- **isSend**: si la peticion se envio correctamente
 
-## useLazyQuery
+## useStart
 
-el hook useLazyQuery sirve para poder dar uso las peticiones de tipo query, la diferencia es que la puede hacer en el momento que tu desees.
+hook para ejecutar un funcion cuando la peticion se envie
 
 `params`:
 
-- `nameRequest` : nombre de la query,definidos en las configuraciones , ejemplo: `getUsers`
-- `params? <Array[string]>` : parametros que le vas a pasar a la peticion
+- `callback <Function>` : funcion a ejectutar
 
 ```jsx
-import { useLazyQuery } from '@jdev/http-client'
+import { useStart,useRequest,useSendRequest } from '@jdev/http-client'
 
-function ListUser() {
-  const { data, isLoading, query, error } = useLazyQuery('createUser') //
+function ListUser(){
+  const { data, isLoading,sendRequest, error} = useRequest('getUsers',null,2000) //
+  const isSend = useSendRequest(sendRequest,null,4000)
+  useStart(() => console.log('Peticion Enviada'))
+
+  return (
+    <div>
+      {isLoading && <p>Loading</p>}
+      {data && <CardUser data={data?.getUsers.data}>}
+      {error && <p>{error}</p> }
+      {isSend && <p>Respuesta enviada</p>}
+    </div>
+  )
+}
+```
+
+## useEnd
+
+hook para ejecutar un funcion cuando la peticion termine
+
+`params`:
+
+- `callback <Function>` : funcion a ejecutar
+
+```jsx
+import { useEnd,useRequest,useSendRequest } from '@jdev/http-client'
+
+function ListUser(){
+  const { data, isLoading,sendRequest, error} = useRequest('getUsers',null,2000) //
+  const isSend = useSendRequest(sendRequest,null,4000)
+  useEnd(() => console.log('Peticion terminada'))
+
+  return (
+    <div>
+      {isLoading && <p>Loading</p>}
+      {data && <CardUser data={data?.getUsers.data}>}
+      {error && <p>{error}</p> }
+      {isSend && <p>Respuesta enviada</p>}
+    </div>
+  )
+}
+```
+
+## useError
+
+hook para ejecutar un funcion cuando la peticion tenga un error
+
+`params`:
+
+- `callback <Function>` : funcion a ejecutar
+
+```jsx
+import { useError,useRequest,useSendRequest } from '@jdev/http-client'
+
+function ListUser(){
+  const { data, isLoading,sendRequest, error} = useRequest('getUsers',null,2000) //
+  const isSend = useSendRequest(sendRequest,null,4000)
+  useError(() => console.log('Peticion fallo'))
+
+  return (
+    <div>
+      {isLoading && <p>Loading</p>}
+      {data && <CardUser data={data?.getUsers.data}>}
+      {error && <p>{error}</p> }
+      {isSend && <p>Respuesta enviada</p>}
+    </div>
+  )
+}
+```
+
+## useBaseURL
+
+hook para obtener y modificar la baseURL del Http-client
+
+```jsx
+import { useBaseURL, useEffect } from '@jdev/http-client'
+
+function App() {
+  const { url, changeBaseURL } = useBaseURL()
 
   useEffect(() => {
-    query()
+    changeBaseURL('https://localhost:4000/')
   }, [])
 
   return (
     <div>
-      {isLoading && <p>Loading</p>}
-      {data && data?.data.map((user) => <p>{user.username}</p>)}
-      {error && <p>{error}</p>}
+      <p>URL: {url}</p>
     </div>
   )
 }
 ```
 
-el hook useLazyQuery devuelve los siguentes valores.
+el hook useBaseURL devuelve los siguentes valores.
 
-- **data**: aqui devolvera los resultados de la peticion
-- **isLoading**: si la peticion aun se esta cargado
-- **query**: para enviar la peticion al servidor
-- **isError**: si hay un error
-- **error**: el error de la peticion
-- **status**: el codigo de status de la peticion
-- **statusText**: el codigo de status en texto
-- **isOk**: si la peticion fue todo un exito
-- **abortRequest**: para abordar la peticion
+- **url**: url actual
+- **changeBaseURL**: para cambiar la url actual
+
+## useGlobalConfig
+
+hook para obtener y modificar toda la configuracion del Http-client
+
+```jsx
+import { useGlobalConfig } from '@jdev/http-client'
+
+function App() {
+  const { config, changeConfig } = useGlobalConfig()
+
+  useEffect(() => {
+    changeConfig((config, setConfig) => {
+      setConfig({
+        ...config,
+        listURL: [
+          ...config.listURL,
+          {
+            nameRequest: 'deleteUser',
+            method: 'DELETE',
+            url: 'api/deleteUser',
+          },
+        ],
+      })
+    })
+  }, [])
+
+  return (
+    <div>
+      <p>Config: {config}</p>
+    </div>
+  )
+}
+```
+
+el hook useGlobalConfig devuelve los siguentes valores.
+
+- **config**: config actual
+- **changeConfig**: para cambiar la config actual
+
+## useInterceptors
+
+hook para obtener y modificar toda la cabecera de las requests
+
+```jsx
+import { useInterceptors } from '@jdev/http-client'
+
+function App() {
+  const { headers, setItem } = useInterceptors()
+  setItem('Authorization', 'Bearer lkjd91023uadali%%') // -> actualizar siempre los headers antes de enviar la peticion al servidor
+
+  return (
+    <div>
+      <p>Headers: {headers}</p>
+    </div>
+  )
+}
+```
+
+el hook useInterceptors devuelve los siguentes valores.
+
+- **headers**: headers actual
+- **setItem**: para añadir un **Item** nuevo en el cabecera
+- **deleteItem**: para eliminar un **Item** del cabecera
+- **clear**: para limpiar toda la cabecera
