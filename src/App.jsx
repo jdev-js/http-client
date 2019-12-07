@@ -1,17 +1,20 @@
-import useQuery from './libs/use-query'
+import useRequest from './use-request'
+import useSendRequest from './use-send-request'
+import useStart from './use-start'
+import useEnd from './use-end'
 
 export default function App() {
-  const { data,isLoading } = useQuery('getUsers')
+  const { data, isLoading, sendRequest } = useRequest('getUser')
+  const isSend = useSendRequest(sendRequest)
+
+  useStart(() => console.log('Start Request'))
+  useEnd(() => console.log('End Request'))
+
   return (
     <div>
-      <h1>Hola Mundo</h1>
+      {data !== null && <p>Data</p>}
       {isLoading && <p>Loading</p>}
-      {data && data?.getUsers?.data.map((user,index) => {
-        return <div key={index}>
-          <h2>{user.username}</h2>
-          <p>{user.email}</p>
-        </div>
-      })}
+      {isSend && <p>Request Enviada</p>}
     </div>
   )
 }

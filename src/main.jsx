@@ -1,18 +1,21 @@
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
-import HttpProvider from './libs/http-provider.jsx'
+import HttpProvider from './http-provider.jsx'
 
-const BASE_URL = 'http://localhost:5173/api' 
-
-const Querys = [
-  {
-    name: 'getUsers',
-    url: '/users.json',
-  }
-]
+const BASE_URL = 'http://localhost:5173/api'
+const config = {
+  listURL: [
+    {
+      nameRequest: 'getUser',
+      url: '/users.json',
+      method: 'GET',
+    },
+  ],
+  baseURL: BASE_URL,
+}
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <HttpProvider querys={Querys} baseUrl={BASE_URL}>
-      <App />
-    </HttpProvider>,
+  <HttpProvider config={config}>
+    <App />
+  </HttpProvider>
 )
