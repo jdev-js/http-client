@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
-import { EVENT } from './constans'
+import { NAMES_EVENT } from './constans'
 
 export default function useEnd(callback) {
   useEffect(() => {
-    window.addEventListener(EVENT.REQUESTEND, () => callback())
+    window.addEventListener(NAMES_EVENT.REQUESTEND, () => callback())
     return () => {
-      window.removeEventListener(EVENT.REQUESTEND, () => callback())
+      window.removeEventListener(NAMES_EVENT.REQUESTEND, () => callback())
     }
   }, [])
 }

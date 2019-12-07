@@ -37,25 +37,19 @@ export default function useRequest(nameRequest = '', body, timeAbort = 2000) {
         abortRequest()
       }
     }, timeAbort) // evento de peticion fue enviada
-    fetch(
-      `${config.baseURL}${HTTP_URL.url}${params ? params : ''}`,
-      configRequest
-    )
+    fetch(`${config.baseURL}${HTTP_URL.url}${params ?? ''}`, configRequest)
       .then((res) => res.json())
       .then((data) => {
         setData(data)
-        const newEventResponseReceived = new Event(EVENT.RESPONSERECEIVED)
-        window.dispatchEvent(newEventResponseReceived) // Evento de respuesta recividad
+        window.dispatchEvent(EVENT.RESPONSERECEIVED) // Evento de respuesta recividad
       })
       .catch((error) => {
-        const newEventRequestError = new Event(EVENT.REQUESTERROR)
-        window.dispatchEvent(newEventRequestError) // Evento de error de peticion
+        window.dispatchEvent(EVENT.REQUESTERROR) // Evento de error de peticion
         setIsError(true)
         setError(error)
       })
       .finally(() => {
-        const newEventRequestEnd = new Event(EVENT.REQUESTEND) // Evento de que la peticion termino
-        window.dispatchEvent(newEventRequestEnd)
+        window.dispatchEvent(EVENT.REQUESTEND)
         setIsLoading(false)
       })
   }, [])

@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
-import { EVENT } from './constans'
+import { NAMES_EVENT } from './constans'
 
 export default function useError(callback) {
   useEffect(() => {
-    window.addEventListener(EVENT.REQUESTERROR, () => callback())
+    window.addEventListener(NAMES_EVENT.REQUESTERROR, () => callback())
     return () => {
-      window.removeEventListener(EVENT.REQUESTERROR, () => callback())
+      window.removeEventListener(NAMES_EVENT.REQUESTERROR, () => callback())
     }
   }, [])
 }

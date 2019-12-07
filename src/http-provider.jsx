@@ -21,8 +21,7 @@ export default function HttpProvider({ children, config: configDefault }) {
 
   const changeConfig = (callback) => {
     callback(config, setConfig)
-    const newEvent = new Event(EVENT.CONFIGCHANGE)
-    window.dispatchEvent(newEvent)
+    window.dispatchEvent(EVENT.CONFIGCHANGE)
   }
 
   return (

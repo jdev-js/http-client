@@ -9,8 +9,7 @@ export default function useSendRequest(functionRequest, params, timeUpdate) {
     if (timeUpdate === undefined || timeUpdate === null) {
       functionRequest(params)
       setIsSend(true)
-      const newEventRequestStart = new Event(EVENT.REQUESTSTART)
-      window.dispatchEvent(newEventRequestStart)
+      window.dispatchEvent(EVENT.REQUESTSTART)
     } else if (timeUpdate > 0) {
       setIsSend(true)
       interval = window.setInterval(() => functionRequest(params), timeUpdate)
