@@ -9,6 +9,18 @@ export default function useInterceptors() {
       [key]: value,
     }
   }
+  const deleteItem = (key) => {
+    let newHeaders = {}
+    Object.entries(headers.current).forEach(([keyValue, value]) => {
+      if (keyValue !== key) {
+        newHeaders[keyValue] = value
+      }
+    })
+    headers.current = newHeaders
+  }
+  const clear = () => {
+    headers.current = {}
+  }
 
-  return { headers, setItem }
+  return { headers, setItem, deleteItem, clear }
 }
