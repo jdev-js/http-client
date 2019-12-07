@@ -13,37 +13,30 @@ export default function useRequest(nameRequest = '', body, timeAbort = 2000) {
     (url) => url.nameRequest === nameRequest
   )
 
-  const abortController = new AbortController() // Abortador de request
+  const abortController = new AbortController()
   const abortRequest = () => {
     abortController.abort()
   }
 
-  let configRequest = null
-  if (body === null || body === undefined) {
-    configRequest = {
-      method: HTTP_URL.method,
-      headers: headers.current,
-      signal: abortController.signal,
-    }
-  } else {
+  let configRequest = {
+    method: HTTP_URL.method,
+    headers: headers.current,
+    signal: abortController.signal,
+  }
+  if (body !== null || body !== undefined) {
     const formData = new FormData()
     Object.entries(body).forEach(([key, value]) => formData.append(key, value))
     configRequest = {
+      ...configRequest,
       body: formData,
-      method: HTTP_URL.method,
-      headers: headers.current,
-      signal: abortController.signal,
     }
   }
-
   const sendRequest = useCallback((params) => {
     setTimeout(() => {
       if (data === null) {
         abortRequest()
       }
-    }, timeAbort)
-    const newEventRequestStart = new Event(EVENT.REQUESTSTART)
-    window.dispatchEvent(newEventRequestStart) // evento de peticion fue enviada
+    }, timeAbort) // evento de peticion fue enviada
     fetch(
       `${config.baseURL}${HTTP_URL.url}${params ? params : ''}`,
       configRequest
