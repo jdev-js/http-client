@@ -1,7 +1,6 @@
-import { useState } from 'react'
-import Query from './Query'
-import Mutation from './Mutation'
+import { useRef, useState } from 'react'
 import { httpContext } from './http-context'
+import { EVENT } from './constans'
 
 /**
  * @typedef {Object} URL
@@ -11,24 +10,24 @@ import { httpContext } from './http-context'
  */
 
 /**
- * @param {{children: React.ReactNode,baseUrl:string,querys: Array<URL>,mutations: Array<URL>}} param0 
- * @returns 
+ * @param {{children: React.ReactNode,config: { listURL: Array<URL>,baseURL: string} }} param0
+ * @returns
  */
-// eslint-disable-next-line react/prop-types
-export default function HttpProvider({children,baseUrl="",headers={},querys = [],mutations = []}){
-    const [token,setToken] = useState(null)
-    const [auth,setAuth] = useState(null)
 
-    const headersRequest = {
-        ...headers,
-        authorization: token,
-        "Content-Type": "application/json"
-    }
-    const querysList = querys.map(query => new Query(query.name,query.url))
-    const mutationsList  = mutations.map(mutation => new Mutation(mutation.name,mutation.url,mutation.method))
-    return(
-        <httpContext.Provider value={{querysList,mutationsList,baseUrl,headersRequest,token,setToken,setAuth,auth}}>
-            {children}
-        </httpContext.Provider>
-    )
-} 
+// eslint-disable-next-line react/prop-types
+export default function HttpProvider({ children, config: configDefault }) {
+  const headers = useRef({}) // -> para evitar el refrecos de la aplicacion antes de la peticion
+  const [config, setConfig] = useState({ ...configDefault })
+
+  const changeConfig = (callback) => {
+    callback(config, setConfig)
+    const newEvent = new Event(EVENT.CONFIGCHANGE)
+    window.dispatchEvent(newEvent)
+  }
+
+  return (
+    <httpContext.Provider value={{ config, headers, changeConfig }}>
+      {children}
+    </httpContext.Provider>
+  )
+}
