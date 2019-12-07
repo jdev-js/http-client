@@ -1,7 +1,15 @@
-export const EVENT = {
+export const NAMES_EVENT = {
   REQUESTSTART: 'requeststart',
   REQUESTEND: 'requestend',
   RESPONSERECEIVED: 'responsereceived',
   REQUESTERROR: 'requesterror',
   CONFIGCHANGE: 'configchange',
+}
+
+export const EVENT = {
+  REQUESTSTART: new Event(NAMES_EVENT.REQUESTSTART),
+  REQUESTEND: new Event(NAMES_EVENT.REQUESTEND),
+  RESPONSERECEIVED: new Event(NAMES_EVENT.RESPONSERECEIVED),
+  REQUESTERROR: new Event(NAMES_EVENT.REQUESTERROR),
+  CONFIGCHANGE: new Event(NAMES_EVENT.CONFIGCHANGE),
 }
