@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { EVENT } from './constans'
 
 export default function useSendRequest(functionRequest, params, timeUpdate) {
   const [isSend, setIsSend] = useState(false)
@@ -8,6 +9,8 @@ export default function useSendRequest(functionRequest, params, timeUpdate) {
     if (timeUpdate === undefined || timeUpdate === null) {
       functionRequest(params)
       setIsSend(true)
+      const newEventRequestStart = new Event(EVENT.REQUESTSTART)
+      window.dispatchEvent(newEventRequestStart)
     } else if (timeUpdate > 0) {
       setIsSend(true)
       interval = window.setInterval(() => functionRequest(params), timeUpdate)
