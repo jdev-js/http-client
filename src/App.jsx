@@ -1,10 +1,7 @@
 import useQuery from './libs/use-query'
-import useParams from './libs/useParams'
 
 export default function App() {
   const { data,isLoading } = useQuery('getUsers')
-  const params = useParams()
-  console.log(params)
   return (
     <div>
       <h1>Hola Mundo</h1>
