@@ -1,9 +1,20 @@
 {
   "name": "@jdev/http-client",
   "type": "module",
+  "description": "Http-client for project React for optimizer the Request Server",
   "version": "1.0.0",
   "main": "lib/src/index.js",
   "module": "lib/src/index.js",
+  "keywords": [
+    "http-client",
+    "client",
+    "http",
+    "client-http",
+    "react",
+    "react-http-client",
+    "@jdev",
+    "jdev"
+  ],
   "exports":{
     ".": {
       "import": "lib/src/index.js",
@@ -22,6 +33,10 @@
     "react": "18.2.0",
     "react-dom": "18.2.0"    
   },
+  "homepage": "https://github.com/jdev-js/http-client#readme",
+  "busgs":{
+   "url": "https://github.com/jdev-jd/http-client/issues"
+  },	
   "devDependencies": {
     "react": "18.2.0",
     "react-dom": "18.2.0",
