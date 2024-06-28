@@ -7,7 +7,6 @@
 5. ✅ Hooks personalizados
 6. ✅ Manejo de estados
 7. Cacheo de datos
-8. Autenticacion
 
 ## Hooks:
 
@@ -21,7 +20,6 @@
 8. ✅ useBaseURL
 9. useAsync
 10. useMultiplyQuery
-11. useAuth
 
 ## ✅ Eventos
 

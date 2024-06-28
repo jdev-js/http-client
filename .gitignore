@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 api
+TODO.md
 
 # Editor directories and files
 .vscode/*
